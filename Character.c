@@ -3,7 +3,7 @@
 #define SPEED 10
 
 typedef enum { NORTH, EAST, SOUTH, WEST } DIRECTION;
-typedef struct coordinates { int x; int y } Coordinates;
+typedef struct coordinates { int x; int y; } Coordinates;
 
 
 Coordinates position;
