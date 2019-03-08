@@ -1,9 +1,9 @@
-
 #include<stdio.h>
-#define SPEED 10
+#include "graphics.h"
+#include "Global.h"
 
-typedef enum { NORTH, EAST, SOUTH, WEST } DIRECTION;
-typedef struct coordinates { int x; int y; } Coordinates;
+#define SPEED 5
+#define WIDTH 10
 
 
 Coordinates position;
@@ -19,31 +19,31 @@ void initCharacterPosition() {
 void DrawCharacter() {
 	switch (orientation) {
 		case NORTH:
-			printf("going north");
+			rectangle(position.x - WIDTH, position.y - WIDTH, position.x + WIDTH, position.y + WIDTH);
 			break;
 	
 		case SOUTH:
-			printf("going south");
+			rectangle(position.x - WIDTH, position.y - WIDTH, position.x + WIDTH, position.y + WIDTH);
 			break;
 
 		case EAST:
-			printf("going east");
+			rectangle(position.x - WIDTH, position.y - WIDTH, position.x + WIDTH, position.y + WIDTH);
 			break;
 
 		case WEST:
-			printf("going westh");
+			rectangle(position.x - WIDTH, position.y - WIDTH, position.x + WIDTH, position.y + WIDTH);
 			break;
 	}
 }
 
 void MoveUp() {
 	orientation = NORTH;
-	position.y += SPEED;
+	position.y -= SPEED;
 }
 
 void MoveDown() {
 	orientation = SOUTH;
-	position.y -= SPEED;
+	position.y += SPEED;
 }
 
 void MoveRight() {

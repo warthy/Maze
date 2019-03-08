@@ -1,20 +1,27 @@
 #include <stdio.h>
-#include "library\graphics.h"
+#include <stdlib.h>
+#include <math.h>
+#include <graphics.h>
+#include <dos.h>
+#include <conio.h>   
 
+#include "Global.h"
 #include "Character.h"
 
-typedef enum { false, true } bool;
 bool isWin;
 void initGame();
 
 int main() {
-
+	int gd = DETECT, gm = 0;
+	initgraph(&gd, &gm, "");
 	initGame();
 
 	int keyPressed = 0;
 	do {
+		clearviewport();
 		DrawCharacter();
-
+		
+		delay(50);
 		if (_kbhit()) {
 			keyPressed = _getch();
 			switch (keyPressed) {
@@ -42,10 +49,12 @@ int main() {
 		}
 
 	} while (isWin || keyPressed != KEY_ESCAPE);
+
+	return 0;
 }
 
 
 void initGame() {
 	initCharacterPosition();
-	isWin = false;
+	isWin = FALSE;
 }

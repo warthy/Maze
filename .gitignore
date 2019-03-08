@@ -4,6 +4,7 @@
 # Visual Studio 2015/2017 cache/options directory
 .vs/
 Debug/
+openbgi-sources-1.5/
 
 # Visual C++ cache files
 ipch/
@@ -20,6 +21,7 @@ ipch/
 Maze.sln
 Maze.vcxproj
 Maze.vcxproj.filters
+Maze.vcxproj.user
 
 
 # Object files
