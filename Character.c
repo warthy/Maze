@@ -3,7 +3,6 @@
 #include "Global.h"
 
 #define SPEED 5
-#define WIDTH 5
 
 
 Coordinates position;
@@ -18,19 +17,19 @@ void initCharacterPosition(Coordinates startPoint) {
 void DrawCharacter() {
 	switch (orientation) {
 		case NORTH:
-			rectangle(position.x - WIDTH, position.y - WIDTH, position.x + WIDTH, position.y + WIDTH);
+			rectangle(position.x - USER_WIDTH, position.y - USER_WIDTH, position.x + USER_WIDTH, position.y + USER_WIDTH);
 			break;
 	
 		case SOUTH:
-			rectangle(position.x - WIDTH, position.y - WIDTH, position.x + WIDTH, position.y + WIDTH);
+			rectangle(position.x - USER_WIDTH, position.y - USER_WIDTH, position.x + USER_WIDTH, position.y + USER_WIDTH);
 			break;
 
 		case EAST:
-			rectangle(position.x - WIDTH, position.y - WIDTH, position.x + WIDTH, position.y + WIDTH);
+			rectangle(position.x - USER_WIDTH, position.y - USER_WIDTH, position.x + USER_WIDTH, position.y + USER_WIDTH);
 			break;
 
 		case WEST:
-			rectangle(position.x - WIDTH, position.y - WIDTH, position.x + WIDTH, position.y + WIDTH);
+			rectangle(position.x - USER_WIDTH, position.y - USER_WIDTH, position.x + USER_WIDTH, position.y + USER_WIDTH);
 			break;
 	}
 }
@@ -63,7 +62,10 @@ void MoveCharacter(int keyPressed, Maze maze) {
 }
 
 bool isMovementAllowed(Coordinates temp, Maze maze) {
-	return FALSE;
+	if (temp.x - USER_WIDTH < 0 || temp.y - USER_WIDTH < 0 || temp.x + USER_WIDTH > getmaxx() || temp.y + USER_WIDTH > getmaxy())
+		return FALSE;
+
+	return TRUE;
 }
 
 Coordinates GetPosition() {
