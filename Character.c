@@ -63,7 +63,7 @@ void MoveCharacter(int keyPressed, Maze maze) {
 }
 
 bool isMovementAllowed(Coordinates temp, Maze maze) {
-
+	return FALSE;
 }
 
 Coordinates GetPosition() {

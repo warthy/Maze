@@ -6,7 +6,7 @@
 
 typedef enum { NORTH, EAST, SOUTH, WEST } DIRECTION;
 typedef struct coordinates { int x; int y; } Coordinates;
-typedef enum { TRUE, FALSE } bool;
+typedef enum { FALSE, TRUE } bool;
 typedef int Schema[24][32];
 typedef struct maze { Schema schema; Coordinates start; } Maze;
 

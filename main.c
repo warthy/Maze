@@ -30,13 +30,13 @@ int main() {
 
 		if (_kbhit()) {
 			keyPressed = _getch();
-			moveCharacter();
+			MoveCharacter(keyPressed, GetMaze());
 		}
 
 		setvisualpage(i % 2);
 		i++;
 
-	} while (isWin || keyPressed != KEY_ESCAPE);
+	} while (!isWin || keyPressed != KEY_ESCAPE);
 
 	return 0;
 }
