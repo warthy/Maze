@@ -1,19 +1,18 @@
 #include<stdio.h>
-#include "graphics.h"
+#include <graphics.h>
 #include "Global.h"
 
 #define SPEED 5
-#define WIDTH 10
+#define WIDTH 5
 
 
 Coordinates position;
 DIRECTION orientation;
 
 
-void initCharacterPosition() {
+void initCharacterPosition(Coordinates startPoint) {
 	orientation = NORTH;
-	position.x = 0;
-	position.y = 0;
+	position = startPoint;
 }
 
 void DrawCharacter() {
@@ -36,24 +35,35 @@ void DrawCharacter() {
 	}
 }
 
-void MoveUp() {
-	orientation = NORTH;
-	position.y -= SPEED;
+void MoveCharacter(int keyPressed, Maze maze) {
+
+	Coordinates temp = position;
+
+	switch (keyPressed) {
+		case KEY_UP:
+			orientation = NORTH;
+			temp.y -= SPEED;
+			break;
+		case KEY_DOWN:
+			orientation = SOUTH;
+			temp.y += SPEED;
+			break;
+		case KEY_RIGHT:
+			orientation = EAST;
+			temp.x += SPEED;
+			break;
+		case KEY_LEFT:
+			orientation = WEST;
+			temp.x -= SPEED;
+			break;
+	}
+	
+	//If the movement is possible (not blocked by wall) we update character position
+	if (isMovementAllowed(temp, maze)) position = temp;
 }
 
-void MoveDown() {
-	orientation = SOUTH;
-	position.y += SPEED;
-}
+bool isMovementAllowed(Coordinates temp, Maze maze) {
 
-void MoveRight() {
-	orientation = EAST;
-	position.x += SPEED;
-}
-
-void MoveLeft() {
-	orientation = WEST;
-	position.x -= SPEED;
 }
 
 Coordinates GetPosition() {
