@@ -65,6 +65,23 @@ bool isMovementAllowed(Coordinates temp, Maze maze) {
 	if (temp.x - USER_WIDTH < 0 || temp.y - USER_WIDTH < 0 || temp.x + USER_WIDTH > getmaxx() || temp.y + USER_WIDTH > getmaxy())
 		return FALSE;
 
+	switch (orientation) {
+		case NORTH:
+			
+			break;
+
+		case SOUTH:
+			
+			break;
+
+		case EAST:
+			break;
+
+		case WEST:
+			
+			break;
+	}
+
 	return TRUE;
 }
 
