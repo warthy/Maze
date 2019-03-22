@@ -2,7 +2,7 @@
 #define MAZE_H
 
 extern void initMaze(void);
-extern void DrawMaze(void);
-extern Maze GetMaze(void);
+extern void drawMaze(Coordinates characterPosition);
+extern Maze getMaze(void);
 
 #endif

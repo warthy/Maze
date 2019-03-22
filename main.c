@@ -20,19 +20,19 @@ int main() {
 	initGame();
 	
 
-	int keyPressed = 0, i=0;
+	int keyPressed = 0, i = 0;
 	do {
 		setactivepage(i % 2);
 
 		clearviewport();
-		DrawCharacter();
-		DrawMaze(GetPosition());
+		drawCharacter();
+		drawMaze(getCharacterPosition());
 
 		delay(10);
 
 		if (_kbhit()) {
 			keyPressed = _getch();
-			MoveCharacter(keyPressed, GetMaze());
+			moveCharacter(keyPressed, getMaze());
 		}
 
 		setvisualpage(i % 2);
@@ -45,12 +45,12 @@ int main() {
 
 
 void initGame() {
-	initCharacterPosition(GetMaze().start);
+	initCharacterPosition(getMaze().start);
 }
 
 bool isWin() {
-	Coordinates playerPos = GetPosition();
-	Coordinates finishPos = GetMaze().finish;
+	Coordinates playerPos = getCharacterPosition();
+	Coordinates finishPos = getMaze().finish;
 	
 	if (
 		(playerPos.x < finishPos.x + USER_WIDTH && playerPos.x > finishPos.x - USER_WIDTH) &&

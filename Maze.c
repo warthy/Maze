@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <graphics.h>
+#include <math.h>
 #include "Global.h"
+
 
 
 Maze mazeSelected = {
@@ -39,7 +41,8 @@ void initMaze() {
 	//get random maze or specific one among list
 }
 
-void DrawMaze() {
+
+void drawMaze(Coordinates characterPosition) {
 
 	int sizex = sizeof(mazeSelected.schema[0]) / sizeof(int);
 	int sizey = (sizeof(mazeSelected.schema) / sizeof(int)) / sizex;
@@ -49,7 +52,10 @@ void DrawMaze() {
 	for (int line = 0; line < sizey; line++) {
 		bloc.x = BLOC_WIDTH;
 		for (int column = 0; column < sizex; column++) {
-			if (mazeSelected.schema[line][column]) bar(bloc.x - BLOC_WIDTH, bloc.y - BLOC_WIDTH, bloc.x + BLOC_WIDTH, bloc.y + BLOC_WIDTH);
+			int distance = pow(pow(characterPosition.x - bloc.x, 2) + pow(characterPosition.y - bloc.y, 2), 0.5);
+			if (mazeSelected.schema[line][column] && distance < USER_RANGE) {
+				bar(bloc.x - BLOC_WIDTH, bloc.y - BLOC_WIDTH, bloc.x + BLOC_WIDTH, bloc.y + BLOC_WIDTH);
+			}
 			bloc.x += BLOC_WIDTH*2;
 		}
 		bloc.y += BLOC_WIDTH*2;
@@ -61,7 +67,7 @@ void DrawMaze() {
 }
 
 
-Maze GetMaze() {
+Maze getMaze() {
 	return mazeSelected;
 }
 

@@ -2,8 +2,8 @@
 #define CHARACTER_H
 
 extern void initCharacterPosition(Coordinates);
-extern void DrawCharacter();
-extern void MoveCharacter(int, Maze);
-extern Coordinates GetPosition();
+extern void drawCharacter();
+extern void moveCharacter(int, Maze);
+extern Coordinates getCharacterPosition();
 
 #endif
