@@ -2,7 +2,6 @@
 #include <graphics.h>
 #include "Global.h"
 
-#define WIDTH 10
 
 Maze mazeSelected = {
 	{
@@ -45,16 +44,19 @@ void DrawMaze() {
 	int sizex = sizeof(mazeSelected.schema[0]) / sizeof(int);
 	int sizey = (sizeof(mazeSelected.schema) / sizeof(int)) / sizex;
 	
-	Coordinates bloc = {WIDTH, WIDTH};
+	Coordinates bloc = {BLOC_WIDTH, BLOC_WIDTH};
 
 	for (int line = 0; line < sizey; line++) {
-		bloc.x = WIDTH;
+		bloc.x = BLOC_WIDTH;
 		for (int column = 0; column < sizex; column++) {
-			if (mazeSelected.schema[line][column]) bar(bloc.x - WIDTH, bloc.y - WIDTH, bloc.x + WIDTH, bloc.y + WIDTH);
-			bloc.x += WIDTH*2;
+			if (mazeSelected.schema[line][column]) bar(bloc.x - BLOC_WIDTH, bloc.y - BLOC_WIDTH, bloc.x + BLOC_WIDTH, bloc.y + BLOC_WIDTH);
+			bloc.x += BLOC_WIDTH*2;
 		}
-		bloc.y += WIDTH*2;
+		bloc.y += BLOC_WIDTH*2;
 	}
+
+	setcolor(rgb(0,255,0));
+	rectangle(mazeSelected.finish.x - BLOC_WIDTH, mazeSelected.finish.y - BLOC_WIDTH, mazeSelected.finish.x + BLOC_WIDTH, mazeSelected.finish.y + BLOC_WIDTH);
 
 }
 

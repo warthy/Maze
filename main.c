@@ -9,12 +9,14 @@
 #include "Character.h"
 #include "Maze.h"
 
-bool isWin;
+
+
+bool isWin();
 void initGame();
 
 int main() {
 	int gd = DETECT, gm = 0;
-	initgraph(&gd, &gm, "");
+	initgraph(&gd, &gm, "RGB");
 	initGame();
 	
 
@@ -26,7 +28,7 @@ int main() {
 		DrawCharacter();
 		DrawMaze(GetPosition());
 
-		delay(50);
+		delay(10);
 
 		if (_kbhit()) {
 			keyPressed = _getch();
@@ -36,7 +38,7 @@ int main() {
 		setvisualpage(i % 2);
 		i++;
 
-	} while (!isWin || keyPressed != KEY_ESCAPE);
+	} while (!isWin() && keyPressed != KEY_ESCAPE);
 
 	return 0;
 }
@@ -44,5 +46,17 @@ int main() {
 
 void initGame() {
 	initCharacterPosition(GetMaze().start);
-	isWin = FALSE;
+}
+
+bool isWin() {
+	Coordinates playerPos = GetPosition();
+	Coordinates finishPos = GetMaze().finish;
+	
+	if (
+		(playerPos.x < finishPos.x + USER_WIDTH && playerPos.x > finishPos.x - USER_WIDTH) &&
+		(playerPos.y < finishPos.y + USER_WIDTH && playerPos.y > finishPos.y - USER_WIDTH)
+	) {
+		return TRUE;
+	}
+	return FALSE;
 }
