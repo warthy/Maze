@@ -32,6 +32,7 @@ void initCharacterPosition(Coordinates startPoint) {
 *  returns: void
 */
 void drawCharacter() {
+	setcolor(rgb(0, 255, 0));
 	switch (orientation) {
 		case NORTH:
 			rectangle(position.x - USER_WIDTH, position.y - USER_WIDTH, position.x + USER_WIDTH, position.y + USER_WIDTH);

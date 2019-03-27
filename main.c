@@ -38,13 +38,14 @@ int main() {
 		setvisualpage(i % 2);
 		i++;
 
-	} while (!isWin() && keyPressed != KEY_ESCAPE);
+	} while (1);
 
 	return 0;
 }
 
 
 void initGame() {
+	initMaze();
 	initCharacterPosition(getMaze().start);
 }
 
