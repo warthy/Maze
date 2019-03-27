@@ -25,8 +25,9 @@ int main() {
 		setactivepage(i % 2);
 
 		clearviewport();
-		drawCharacter();
+		
 		drawMaze(getCharacterPosition());
+		drawCharacter();
 
 		delay(10);
 
