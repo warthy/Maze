@@ -33,9 +33,8 @@ void initMaze() {
 		randCol = rand() % (MAZE_WIDTH);
 
 	mazeSelected.schema[randRow][randCol] = 0;
-	mazeSelected.start.x = 2 * randCol*BLOC_WIDTH + BLOC_WIDTH*2;
-	mazeSelected.start.y = 2 * randRow*BLOC_WIDTH + BLOC_WIDTH*2;
-	
+	mazeSelected.start.x = 2 * BLOC_WIDTH * (randCol + 1);
+	mazeSelected.start.y = 2 * BLOC_WIDTH * (randRow + 1);
 
 	/* Start carving the maze - cf. Depth-First Search Algorithm. */
 	carvingRecursion(randRow, randCol);

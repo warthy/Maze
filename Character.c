@@ -1,4 +1,5 @@
-#include<stdio.h>
+#include <stdio.h>
+#include <math.h>
 #include <graphics.h>
 #include "Global.h"
 
@@ -9,11 +10,11 @@ Coordinates position;
 DIRECTION orientation;
 
 /*
-* Function:  DrawCharacter
+* Function:  initCharacterPosition
 * --------------------
-*  initalize character position to the maze' startpoint
+*  initalize character position to the maze' starting point
 *
-*  startPoint: coordinates of the maze' startpoint.
+*  startPoint: coordinates of the maze' starting point.
 *
 *  returns: void
 */
@@ -86,8 +87,9 @@ void moveCharacter(int keyPressed, Maze maze) {
 			break;
 	}
 	
-	//If the movement is possible (not blocked by wall or extremities) we update character position
+	/* If the movement is possible (not blocked by wall or extremities) we update character position. */
 	if (isMovementAllowed(temp, maze)) position = temp;
+
 }
 
 
@@ -99,99 +101,79 @@ void moveCharacter(int keyPressed, Maze maze) {
 *  temp: character's temporary coordinates after the movement.
 *  maze: the current maze we are playing in.
 *
-*  returns: True if the movement is allowed and if not it return false. 
+*  returns: True if the movement is allowed and false otherwise. 
 */
 bool isMovementAllowed(Coordinates temp, Maze maze) {
-	//Check we are inside the maze/window
+	/* Check that we are inside the maze/window. */
 	if (temp.x - USER_WIDTH < 0 || temp.y - USER_WIDTH < 0 || temp.x + USER_WIDTH > getmaxx() || temp.y + USER_WIDTH > getmaxy())
 		return FALSE;
 
-	int column = (2 * ((int)(temp.x / 20.0)) + 1) / 2;
-	int line = (2 * ((int)(temp.y / 20.0)) + 1) / 2;
+	int col = (int)(round(temp.x / 20.0) - 1);
+	int row = (int)(round(temp.y / 20.0) - 1);
 
 	switch (orientation) {
+		/* Trying to go up. */
 		case NORTH:
-			if (maze.schema[line][column] || (!(temp.x % 20) && (maze.schema[line][column + 1]))) {
+			if (maze.schema[row][col] || (temp.x % 20 && !(temp.x % 10) && maze.schema[row][col - 1]))
 				return FALSE;
-			}
-			else if (temp.y < ((2 * line + 1) * BLOC_WIDTH) - USER_WIDTH) {
-				if (maze.schema[line - 1][column]) {
+			else if (temp.y < (2 * BLOC_WIDTH * (row + 1)) - USER_WIDTH) {
+				if (maze.schema[row - 1][col])
 					return FALSE;
-				}
-				else if (temp.x < ((2 * column + 1) * BLOC_WIDTH) - USER_WIDTH) {
-					if (maze.schema[line - 1][column - 1]) {
+				else if (temp.x < (2 * BLOC_WIDTH * (col + 1)) - USER_WIDTH)
+					if (maze.schema[row - 1][col - 1])
 						return FALSE;
-					}
-				}
-				else if (temp.x > ((2 * column + 1) * BLOC_WIDTH) + USER_WIDTH) {
-					if (maze.schema[line - 1][column + 1]) {
+				else if (temp.x > (2 * BLOC_WIDTH * (col + 1)) + USER_WIDTH)
+					if (maze.schema[row - 1][col + 1])
 						return FALSE;
-					}
-				}
 			}
 			
 			break;
 
+		/* Trying to go down. */
 		case SOUTH:
-			if (maze.schema[line][column] || (!(temp.x % 20) && (maze.schema[line][column - 1]))) {
+			if (maze.schema[row][col] || (temp.x % 20 && !(temp.x % 10) && maze.schema[row][col + 1]))
 				return FALSE;
-			}
-			else if (temp.y > ((2 * line + 1) * BLOC_WIDTH) + USER_WIDTH) {
-				if (maze.schema[line + 1][column]) {
+			else if (temp.y > (2 * BLOC_WIDTH * (row + 1)) + USER_WIDTH)
+				if (maze.schema[row + 1][col])
 					return FALSE;
-				}
-				else if (temp.x < ((2 * column + 1) * BLOC_WIDTH) - USER_WIDTH) {
-					if (maze.schema[line + 1][column - 1]) {
+				else if (temp.x < (2 * BLOC_WIDTH * (col + 1)) - USER_WIDTH)
+					if (maze.schema[row + 1][col - 1])
 						return FALSE;
-					}
-				}
-				else if (temp.x > ((2 * column + 1) * BLOC_WIDTH) + USER_WIDTH) {
-					if (maze.schema[line + 1][column + 1]) {
+				else if (temp.x > (2 * BLOC_WIDTH * (col + 1)) + USER_WIDTH)
+					if (maze.schema[row + 1][col + 1]) {
 						return FALSE;
-					}
-				}
 			}
 			break;
 
+		/* Trying to go right. */
 		case EAST:
-			if (maze.schema[line][column] || (!(temp.y % 20) && (maze.schema[line + 1][column]))) {
+			if (maze.schema[row][col] || (temp.y % 20 && !(temp.y % 10) && maze.schema[row - 1][col]))
 				return FALSE;
-			}
-			else if (temp.x > ((2 * column + 1) * BLOC_WIDTH) + USER_WIDTH) {
-				if (maze.schema[line][column + 1]) {
+			else if (temp.x > (2 * BLOC_WIDTH * (col + 1)) + USER_WIDTH) {
+				if (maze.schema[row][col + 1])
 					return FALSE;
-				}
-				else if (temp.y < ((2 * line + 1) * BLOC_WIDTH) - USER_WIDTH) {
-					if (maze.schema[line - 1][column + 1]) {
+				else if (temp.y < (2 * BLOC_WIDTH * (row + 1)) - USER_WIDTH)
+					if (maze.schema[row - 1][col + 1])
 						return FALSE;
-					}
-				}
-				else if (temp.y >((2 * line + 1) * BLOC_WIDTH) + USER_WIDTH) {
-					if (maze.schema[line + 1][column + 1]) {
+				else if (temp.y >(2 * BLOC_WIDTH * (row + 1)) + USER_WIDTH)
+					if (maze.schema[row + 1][col + 1])
 						return FALSE;
-					}
-				}
 			}
 			break;
 
+		/* Trying to go left. */
 		case WEST:
-			if (maze.schema[line][column] || (!(temp.y % 20) && (maze.schema[line - 1][column]))) {
+			if (maze.schema[row][col] || (temp.y % 20 && !(temp.y % 10) && maze.schema[row + 1][col]))
 				return FALSE;
-			}
-			else if (temp.x < ((2 * column + 1) * BLOC_WIDTH) - USER_WIDTH) {
-				if (maze.schema[line][column - 1]) {
+			else if (temp.x <  (2 * BLOC_WIDTH * (col + 1)) - USER_WIDTH) {
+				if (maze.schema[row][col - 1])
 					return FALSE;
-				}
-				else if (temp.y < ((2 * line + 1) * BLOC_WIDTH) - USER_WIDTH) {
-					if (maze.schema[line - 1][column - 1]) {
+				else if (temp.y < (2 * BLOC_WIDTH * (row + 1)) - USER_WIDTH)
+					if (maze.schema[row - 1][col - 1])
 						return FALSE;
-					}
-				}
-				else if (temp.y >((2 * line + 1) * BLOC_WIDTH) + USER_WIDTH) {
-					if (maze.schema[line + 1][column - 1]) {
+				else if (temp.y >(2 * BLOC_WIDTH * (row + 1)) + USER_WIDTH)
+					if (maze.schema[row + 1][col - 1])
 						return FALSE;
-					}
-				}
 			}
 			break;
 	}
