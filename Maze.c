@@ -7,8 +7,11 @@
 
 
 Maze mazeSelected;
+bool partialVision = FALSE;
+
 void carvingRecursion(int row, int col);
 void generateRandomDirection(int array[4]);
+void generateFinishingPoint(void);
 
 void initMaze() {
 	int row, col;
@@ -38,8 +41,11 @@ void initMaze() {
 
 	/* Start carving the maze - cf. Depth-First Search Algorithm. */
 	carvingRecursion(randRow, randCol);
-}
 
+
+	/* Generate random finish point */
+	generateFinishingPoint();
+}
 
 void drawMaze(Coordinates characterPosition) {
 	Coordinates bloc = {2*BLOC_WIDTH, 2*BLOC_WIDTH};
@@ -52,7 +58,7 @@ void drawMaze(Coordinates characterPosition) {
 			int distance = pow(pow(characterPosition.x - bloc.x, 2) + pow(characterPosition.y - bloc.y, 2), 0.5);
 
 			/* Draw a bloc if there is a wall and if bloc is inside character range. */
-			if (mazeSelected.schema[line][column] && distance < USER_RANGE) {
+			if (mazeSelected.schema[line][column] && (!partialVision || distance < USER_RANGE)) {
 				bar(bloc.x - BLOC_WIDTH, bloc.y - BLOC_WIDTH, bloc.x + BLOC_WIDTH, bloc.y + BLOC_WIDTH);
 			}
 			bloc.x += BLOC_WIDTH*2;
@@ -61,15 +67,70 @@ void drawMaze(Coordinates characterPosition) {
 	}
 	
 	/* Draw finish line. */
-	//rectangle(mazeSelected.finish.x - BLOC_WIDTH, mazeSelected.finish.y - BLOC_WIDTH, mazeSelected.finish.x + BLOC_WIDTH, mazeSelected.finish.y + BLOC_WIDTH);
+	setcolor(rgb(255, 0, 0));
+	rectangle(mazeSelected.finish.x - FINISH_WIDTH, mazeSelected.finish.y - FINISH_WIDTH, mazeSelected.finish.x + FINISH_WIDTH, mazeSelected.finish.y + FINISH_WIDTH);
 
 }
-
 
 Maze getMaze() {
 	return mazeSelected;
 }
 
+void changeVisibility() {
+	printf("%d\n", partialVision);
+	partialVision = !partialVision;
+	printf("%d\n", partialVision);
+}
+
+void generateFinishingPoint() {
+	int randCol, randRow, colFinish, rowFinish;
+	
+	DIRECTION side = rand() % 4 + 1;
+	switch (side) {
+		case NORTH:
+			do {
+				randCol = colFinish = rand() % (MAZE_WIDTH - 1) + 1;
+				randRow = 1;
+			} while (mazeSelected.schema[randRow][randCol]);
+
+			rowFinish = 0;
+			mazeSelected.finish.x = 2 * BLOC_WIDTH * (colFinish + 1);
+			mazeSelected.finish.y = 2 * BLOC_WIDTH * (rowFinish + 1);
+			break;
+		case EAST:
+			do {
+				randCol = MAZE_WIDTH - 2;
+				randRow = rowFinish = rand() % (MAZE_HEIGHT - 1) + 1;
+			} while (mazeSelected.schema[randRow][randCol]);
+
+			colFinish = MAZE_WIDTH - 1;
+			mazeSelected.finish.x = 2 * BLOC_WIDTH * (colFinish + 1);
+			mazeSelected.finish.y = 2 * BLOC_WIDTH * (rowFinish + 1);
+			break;
+		case SOUTH:
+			do {
+				randCol = colFinish = rand() % (MAZE_WIDTH - 1) + 1;
+				randRow = MAZE_HEIGHT - 2;
+			} while (mazeSelected.schema[randRow][randCol]);
+
+			rowFinish = MAZE_HEIGHT - 1;
+			mazeSelected.finish.x = 2 * BLOC_WIDTH * (colFinish + 1);
+			mazeSelected.finish.y = 2 * BLOC_WIDTH * (rowFinish + 1);
+			break;
+		case WEST:
+			do {
+				randCol = 1;
+				randRow = rowFinish = rand() % (MAZE_HEIGHT - 1) + 1;
+			} while (mazeSelected.schema[randRow][randCol]);
+
+			colFinish = 0;
+			mazeSelected.finish.x = 2 * BLOC_WIDTH * (colFinish + 1);
+			mazeSelected.finish.y = 2 * BLOC_WIDTH * (rowFinish + 1);
+			break;
+	}
+	
+	mazeSelected.schema[rowFinish][colFinish] = 0;
+}
 
 void carvingRecursion(int row, int col) {
 	int randomDir[4];
@@ -77,46 +138,46 @@ void carvingRecursion(int row, int col) {
 
 	for (int i = 0; i < 4; i++) {
 		switch (randomDir[i]) {
-		/* Direction up */
-		case NORTH:
-			if (row - 2 <= 0)
-				continue;
-			if (mazeSelected.schema[row - 2][col] != 0) {
-				mazeSelected.schema[row - 2][col] = 0;
-				mazeSelected.schema[row - 1][col] = 0;
-				carvingRecursion(row - 2, col);
-			}
-			break;
-		/* Direction right */
-		case EAST:
-			if (col + 2 >= MAZE_WIDTH - 1)
-				continue;
-			if (mazeSelected.schema[row][col + 2] != 0) {
-				mazeSelected.schema[row][col + 2] = 0;
-				mazeSelected.schema[row][col + 1] = 0;
-				carvingRecursion(row, col + 2);
-			}
-			break;
-		/* Direction down */
-		case SOUTH:
-			if (row + 2 >= MAZE_HEIGHT - 1)
-				continue;
-			if (mazeSelected.schema[row + 2][col] != 0) {
-				mazeSelected.schema[row + 2][col] = 0;
-				mazeSelected.schema[row + 1][col] = 0;
-				carvingRecursion(row + 2, col);
-			}
-			break;
-		/* Direction left */
-		case WEST:
-			if (col - 2 <= 0)
-				continue;
-			if (mazeSelected.schema[row][col - 2] != 0) {
-				mazeSelected.schema[row][col - 2] = 0;
-				mazeSelected.schema[row][col - 1] = 0;
-				carvingRecursion(row, col - 2);
-			}
-			break;
+			/* Direction up */
+			case NORTH:
+				if (row - 2 <= 0)
+					continue;
+				if (mazeSelected.schema[row - 2][col] != 0) {
+					mazeSelected.schema[row - 2][col] = 0;
+					mazeSelected.schema[row - 1][col] = 0;
+					carvingRecursion(row - 2, col);
+				}
+				break;
+			/* Direction right */
+			case EAST:
+				if (col + 2 >= MAZE_WIDTH - 1)
+					continue;
+				if (mazeSelected.schema[row][col + 2] != 0) {
+					mazeSelected.schema[row][col + 2] = 0;
+					mazeSelected.schema[row][col + 1] = 0;
+					carvingRecursion(row, col + 2);
+				}
+				break;
+			/* Direction down */
+			case SOUTH:
+				if (row + 2 >= MAZE_HEIGHT - 1)
+					continue;
+				if (mazeSelected.schema[row + 2][col] != 0) {
+					mazeSelected.schema[row + 2][col] = 0;
+					mazeSelected.schema[row + 1][col] = 0;
+					carvingRecursion(row + 2, col);
+				}
+				break;
+			/* Direction left */
+			case WEST:
+				if (col - 2 <= 0)
+					continue;
+				if (mazeSelected.schema[row][col - 2] != 0) {
+					mazeSelected.schema[row][col - 2] = 0;
+					mazeSelected.schema[row][col - 1] = 0;
+					carvingRecursion(row, col - 2);
+				}
+				break;
 		}
 	}
 	

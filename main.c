@@ -33,14 +33,21 @@ int main() {
 
 		if (_kbhit()) {
 			keyPressed = _getch();
-			moveCharacter(keyPressed, getMaze());
+
+			/* KEY_CONTROL is F1 on my computer - UNRIALIBLE*/
+			if (keyPressed == KEY_CONTRL)
+				changeVisibility();
+			else 
+				moveCharacter(keyPressed, getMaze());
 		}
 
 		setvisualpage(i % 2);
 		i++;
 
-	} while (1);
+	} while (!isWin() && keyPressed != KEY_ESCAPE);
 
+	if(isWin())
+		//TODO Display winning screen
 	return 0;
 }
 
@@ -55,8 +62,8 @@ bool isWin() {
 	Coordinates finishPos = getMaze().finish;
 	
 	if (
-		(playerPos.x < finishPos.x + USER_WIDTH && playerPos.x > finishPos.x - USER_WIDTH) &&
-		(playerPos.y < finishPos.y + USER_WIDTH && playerPos.y > finishPos.y - USER_WIDTH)
+		(playerPos.x < finishPos.x + FINISH_WIDTH && playerPos.x > finishPos.x - FINISH_WIDTH) &&
+		(playerPos.y < finishPos.y + FINISH_WIDTH && playerPos.y > finishPos.y - FINISH_WIDTH)
 	) {
 		return TRUE;
 	}

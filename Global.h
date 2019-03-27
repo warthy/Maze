@@ -1,16 +1,12 @@
 #ifndef GLOBAL_H
 #define GLOBAL_H
 
-/* CHANGE VALUE TO 1 TO SEE THE MAZE COMPLETELY */
-#define CHEATER_MODE 1;
-#if CHEATER_MODE
-	#define USER_RANGE 100000
-#else
-	#define USER_RANGE 100
-#endif
+#define USER_RANGE 100
+
 
 #define USER_WIDTH 5
 #define BLOC_WIDTH 10
+#define FINISH_WIDTH 10
 #define MAZE_HEIGHT 23
 #define MAZE_WIDTH 31
 #define ARR_SIZE(arr) ( sizeof((arr)) / sizeof((arr[0])) )
