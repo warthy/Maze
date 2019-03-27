@@ -8,6 +8,7 @@
 
 Coordinates position;
 DIRECTION orientation;
+int size;
 
 /*
 * Function:  initCharacterPosition
@@ -36,19 +37,19 @@ void drawCharacter() {
 	setcolor(rgb(0, 255, 0));
 	switch (orientation) {
 		case NORTH:
-			rectangle(position.x - USER_WIDTH, position.y - USER_WIDTH, position.x + USER_WIDTH, position.y + USER_WIDTH);
+			rectangle(position.x - size, position.y - size, position.x + size, position.y + size);
 			break;
 	
 		case SOUTH:
-			rectangle(position.x - USER_WIDTH, position.y - USER_WIDTH, position.x + USER_WIDTH, position.y + USER_WIDTH);
+			rectangle(position.x - size, position.y - size, position.x + size, position.y + size);
 			break;
 
 		case EAST:
-			rectangle(position.x - USER_WIDTH, position.y - USER_WIDTH, position.x + USER_WIDTH, position.y + USER_WIDTH);
+			rectangle(position.x - size, position.y - size, position.x + size, position.y + size);
 			break;
 
 		case WEST:
-			rectangle(position.x - USER_WIDTH, position.y - USER_WIDTH, position.x + USER_WIDTH, position.y + USER_WIDTH);
+			rectangle(position.x - size, position.y - size, position.x + size, position.y + size);
 			break;
 	}
 }
@@ -105,24 +106,24 @@ void moveCharacter(int keyPressed, Maze maze) {
 */
 bool isMovementAllowed(Coordinates temp, Maze maze) {
 	/* Check that we are inside the maze/window. */
-	if (temp.x - USER_WIDTH < 0 || temp.y - USER_WIDTH < 0 || temp.x + USER_WIDTH > getmaxx() || temp.y + USER_WIDTH > getmaxy())
+	if (temp.x - size < 0 || temp.y - size < 0 || temp.x + size > getmaxx() || temp.y + size > getmaxy())
 		return FALSE;
 
-	int col = (int)(round(temp.x / 20.0) - 1);
-	int row = (int)(round(temp.y / 20.0) - 1);
+	int col = (int)(round(temp.x / (2.0*BLOC_WIDTH)) - 1);
+	int row = (int)(round(temp.y / (2.0*BLOC_WIDTH)) - 1);
 
 	switch (orientation) {
 		/* Trying to go up. */
 		case NORTH:
-			if (maze.schema[row][col] || (temp.x % 20 && !(temp.x % 10) && maze.schema[row][col + 1]))
+			if (maze.schema[row][col] || (temp.x % (2*BLOC_WIDTH) && !(temp.x % 10) && maze.schema[row][col + 1]))
 				return FALSE;
-			else if (temp.y < (2 * BLOC_WIDTH * (row + 1)) - USER_WIDTH) {
+			else if (temp.y < (2 * BLOC_WIDTH * (row + 1)) - size) {
 				if (maze.schema[row - 1][col])
 					return FALSE;
-				else if (temp.x < (2 * BLOC_WIDTH * (col + 1)) - USER_WIDTH)
+				else if (temp.x < (2 * BLOC_WIDTH * (col + 1)) - size)
 					if (maze.schema[row - 1][col - 1])
 						return FALSE;
-				else if (temp.x > (2 * BLOC_WIDTH * (col + 1)) + USER_WIDTH)
+				else if (temp.x > (2 * BLOC_WIDTH * (col + 1)) + size)
 					if (maze.schema[row - 1][col + 1])
 						return FALSE;
 			}
@@ -131,15 +132,15 @@ bool isMovementAllowed(Coordinates temp, Maze maze) {
 
 		/* Trying to go down. */
 		case SOUTH:
-			if (maze.schema[row][col] || (temp.x % 20 && !(temp.x % 10) && maze.schema[row][col - 1]))
+			if (maze.schema[row][col] || (temp.x % (2 * BLOC_WIDTH) && !(temp.x % 10) && maze.schema[row][col - 1]))
 				return FALSE;
-			else if (temp.y > (2 * BLOC_WIDTH * (row + 1)) + USER_WIDTH)
+			else if (temp.y > (2 * BLOC_WIDTH * (row + 1)) + size)
 				if (maze.schema[row + 1][col])
 					return FALSE;
-				else if (temp.x < (2 * BLOC_WIDTH * (col + 1)) - USER_WIDTH)
+				else if (temp.x < (2 * BLOC_WIDTH * (col + 1)) - size)
 					if (maze.schema[row + 1][col - 1])
 						return FALSE;
-				else if (temp.x > (2 * BLOC_WIDTH * (col + 1)) + USER_WIDTH)
+				else if (temp.x > (2 * BLOC_WIDTH * (col + 1)) + size)
 					if (maze.schema[row + 1][col + 1]) {
 						return FALSE;
 			}
@@ -147,15 +148,15 @@ bool isMovementAllowed(Coordinates temp, Maze maze) {
 
 		/* Trying to go right. */
 		case EAST:
-			if (maze.schema[row][col] || (temp.y % 20 && !(temp.y % 10) && maze.schema[row + 1][col]))
+			if (maze.schema[row][col] || (temp.y % (2 * BLOC_WIDTH) && !(temp.y % 10) && maze.schema[row + 1][col]))
 				return FALSE;
-			else if (temp.x > (2 * BLOC_WIDTH * (col + 1)) + USER_WIDTH) {
+			else if (temp.x > (2 * BLOC_WIDTH * (col + 1)) + size) {
 				if (maze.schema[row][col + 1])
 					return FALSE;
-				else if (temp.y < (2 * BLOC_WIDTH * (row + 1)) - USER_WIDTH)
+				else if (temp.y < (2 * BLOC_WIDTH * (row + 1)) - size)
 					if (maze.schema[row - 1][col + 1])
 						return FALSE;
-				else if (temp.y >(2 * BLOC_WIDTH * (row + 1)) + USER_WIDTH)
+				else if (temp.y >(2 * BLOC_WIDTH * (row + 1)) + size)
 					if (maze.schema[row + 1][col + 1])
 						return FALSE;
 			}
@@ -163,15 +164,15 @@ bool isMovementAllowed(Coordinates temp, Maze maze) {
 
 		/* Trying to go left. */
 		case WEST:
-			if (maze.schema[row][col] || (temp.y % 20 && !(temp.y % 10) && maze.schema[row - 1][col]))
+			if (maze.schema[row][col] || (temp.y % (2 * BLOC_WIDTH) && !(temp.y % 10) && maze.schema[row - 1][col]))
 				return FALSE;
-			else if (temp.x <  (2 * BLOC_WIDTH * (col + 1)) - USER_WIDTH) {
+			else if (temp.x <  (2 * BLOC_WIDTH * (col + 1)) - size) {
 				if (maze.schema[row][col - 1])
 					return FALSE;
-				else if (temp.y < (2 * BLOC_WIDTH * (row + 1)) - USER_WIDTH)
+				else if (temp.y < (2 * BLOC_WIDTH * (row + 1)) - size)
 					if (maze.schema[row - 1][col - 1])
 						return FALSE;
-				else if (temp.y >(2 * BLOC_WIDTH * (row + 1)) + USER_WIDTH)
+				else if (temp.y >(2 * BLOC_WIDTH * (row + 1)) + size)
 					if (maze.schema[row + 1][col - 1])
 						return FALSE;
 			}
@@ -191,4 +192,8 @@ bool isMovementAllowed(Coordinates temp, Maze maze) {
 */
 Coordinates getCharacterPosition() {
 	return position;
+}
+
+void setCharacterSize(userSize) {
+	size = userSize;
 }

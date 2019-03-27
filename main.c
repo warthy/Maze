@@ -15,7 +15,12 @@ bool isWin();
 void initGame();
 
 int main() {
-	int gd = DETECT, gm = 0;
+	int gd = DETECT, gm = 0, difficulty;
+	printf("Welcome to THE MAZE \n\n");
+	difficulty = setMazeDifficulty();
+	printf("\n\nMaze generating... \n\n");
+
+
 	initgraph(&gd, &gm, "RGB");
 	initGame();
 	
