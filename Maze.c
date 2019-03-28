@@ -95,26 +95,32 @@ int setMazeDifficulty() {
 	width = 31;
 	switch (difficulty) {
 		case 1:
-			//BLOC WIDTH 20 - 630x470
+			//BLOC WIDTH 20 - 620x460
 			height = 23;
 			width = 31;
 			setCharacterSize(5);
 			break;
 		case 2:
+			//BLOC WIDTH 16 - 624x464
+			height = 29;
+			width = 39;
+			setCharacterSize(5);
+			break;
+		case 3:
 			//BLOC WIDTH 10 - 630x470
 			height = 47;
 			width = 63;
 			setCharacterSize(5);
 			break;
-		case 3:
+		case 4:
 			//BLOC WIDTH 8 - 632x472
 			height = 59;
 			width = 79;
 			setCharacterSize(5);
 			break;
-		case 4:
+		case 5:
 			//BLOC WIDTH 5 - 635x475
-			height = 635;
+			height = 95;
 			width = 127;
 			setCharacterSize(5);
 			break;
