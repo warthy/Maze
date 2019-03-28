@@ -3,7 +3,7 @@
 #include <graphics.h>
 #include "Global.h"
 
-#define SPEED 5
+#define SPEED 2
 
 
 Coordinates position;

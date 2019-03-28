@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+#include <time.h>
 #include <graphics.h>
 #include <dos.h>
 #include <conio.h>   
@@ -17,43 +18,72 @@ void initGame();
 
 int main() {
 	int gd = DETECT, gm = 0, difficulty;
+	char play;
 	printf("Welcome to THE MAZE \n\n");
-	difficulty = setDifficulty();
-	printf("\n\nMaze generating... \n\n");
 
-
-	initgraph(&gd, &gm, "RGB");
-	initGame();
-	
-
-	int keyPressed = 0, i = 0;
 	do {
-		setactivepage(i % 2);
+		difficulty = setDifficulty();
+		printf("\n\nMaze generating... \n\n");
 
-		clearviewport();
-		
-		drawMaze(getCharacterPosition());
-		drawCharacter();
+		initgraph(&gd, &gm, "RGB");
+		initGame();
+		printf("\n\nLet's go !!. \n\n");
 
-		delay(10);
+		/* Clear console. */
+		system("clear");
 
-		if (_kbhit()) {
-			keyPressed = _getch();
 
-			/* KEY_CONTROL is F1 on my computer - UNRIALIBLE*/
-			if (keyPressed == KEY_CONTRL)
-				changeVisibility();
-			else 
-				moveCharacter(keyPressed, getMaze());
+		int keyPressed = 0, i = 0, startTime = time(NULL);
+
+		do {
+			setactivepage(i % 2);
+
+			clearviewport();
+
+			drawMaze(getCharacterPosition());
+			drawCharacter();
+
+			delay(5);
+
+			if (_kbhit()) {
+				keyPressed = _getch();
+
+				/* KEY_CONTROL is F1 on my computer - UNRIALIBLE*/
+				if (keyPressed == KEY_CONTRL)
+					changeVisibility();
+				else
+					moveCharacter(keyPressed, getMaze());
+			}
+
+			setvisualpage(i % 2);
+			i++;
+
+		} while (!isWin() && keyPressed != KEY_ESCAPE);
+
+		int endTime = time(NULL);
+		int timeTaken = (endTime - startTime);
+		if (isWin()) {
+			printf("Congrats, You won !\n");
+
+			if(timeTaken > 60)	printf("this took you: %dmin and %ds \n\n", (int)(timeTaken / 60), timeTaken % 60);
+			else				printf("this took you: %ds \n\n", timeTaken);
+
+			printf("Your score is : %d\n\n", (int)(((float)(difficulty) / (float)(timeTaken)) * 1000));
+
+			//TODO Display winning screen
+		}
+		else {
+			if (timeTaken > 60)	printf("You gave up after: %dmin and %d s\n\n", (int)(timeTaken / 60), timeTaken % 60);
+			else				printf("You gave up after: %d s\n\n", timeTaken);
 		}
 
-		setvisualpage(i % 2);
-		i++;
+		printf("Do you want to play again ?(y/n)");
+		scanf_s("%c", &play);
+		scanf_s("%c", &play);
 
-	} while (!isWin() && keyPressed != KEY_ESCAPE);
+	} while (play == 'y');
+	printf("Bye");
 
-	if(isWin())
-		//TODO Display winning screen
 	return 0;
 }
 
