@@ -90,26 +90,32 @@ int setMazeDifficulty() {
 		printf("Please select a difficulty between 1-4 (the greater the harder): ");
 		scanf_s("%d", &difficulty);
 	} while (difficulty <= 0 || difficulty >= 5);
-
+	
+	height = 23;
+	width = 31;
 	switch (difficulty) {
 		case 1:
+			//BLOC WIDTH 20 - 630x470
 			height = 23;
 			width = 31;
 			setCharacterSize(5);
 			break;
 		case 2:
-			height = 23;
-			width = 31;
+			//BLOC WIDTH 10 - 630x470
+			height = 47;
+			width = 63;
 			setCharacterSize(5);
 			break;
 		case 3:
-			height = 23;
-			width = 31;
+			//BLOC WIDTH 8 - 632x472
+			height = 59;
+			width = 79;
 			setCharacterSize(5);
 			break;
 		case 4:
-			height = 23;
-			width = 31;
+			//BLOC WIDTH 5 - 635x475
+			height = 635;
+			width = 127;
 			setCharacterSize(5);
 			break;
 	}
@@ -225,7 +231,7 @@ void generateRandomDirection(int array[4])
 	}
 		
 	
-	/* Shuffle array - cf. Fisher–Yates shuffle. */
+	/* Shuffle array - cf. Fisherâ€“Yates shuffle. */
 	size_t j;
 	for (j = 0; j < 4-1; j++)
 	{
