@@ -76,7 +76,7 @@ int main() {
 			else				sprintf_s(finishText, 100, "This took you: %ds \n\n", timeTaken);
 			displayText(230, 200, finishText, 12);
 
-			sprintf_s(finishText, 100, "score: %d\n\n", (int)( exp(difficulty) / (float)(timeTaken) ) * 2500);
+			sprintf_s(finishText, 100, "score: %d\n\n", (int)( (float)(pow(difficulty,5)) / (float)(timeTaken) ) * 2500);
 			displayText(10, getmaxy()-18, finishText, 8);
 		}
 		/* Gave up screen */
