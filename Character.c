@@ -3,7 +3,7 @@
 #include <graphics.h>
 #include "Global.h"
 
-#define SPEED 2
+#define SPEED 1
 
 
 Coordinates position;
@@ -11,14 +11,14 @@ DIRECTION orientation;
 float U_SIZE;
 
 /*
-* Function:  initCharacterPosition
-* --------------------
-*  initalize character position to the maze' starting point
-*
-*  startPoint: coordinates of the maze' starting point.
-*
-*  returns: void
-*/
+ *  Function:  initCharacterPosition
+ *  --------------------
+ *  Initalize character position to the maze' starting point
+ *
+ *  startPoint: coordinates of the maze' starting point.
+ *
+ *  returns: void
+ */
 void initCharacterPosition(Coordinates startPoint) {
 	orientation = NORTH;
 	position = startPoint;
@@ -26,13 +26,13 @@ void initCharacterPosition(Coordinates startPoint) {
 
 
 /*
-* Function:  DrawCharacter
-* --------------------
-*  draw the character thanks to its position and
-*  face the orientation of the image according to the last movements made
-*
-*  returns: void
-*/
+ *  Function:  DrawCharacter
+ *  --------------------
+ *  Draw the character thanks to its position and
+ *  face the orientation of the image according to the last movements made
+ *
+ *  returns: void
+ */
 void drawCharacter() {
 	setcolor(rgb(0, 255, 0));
 	switch (orientation) {
@@ -56,15 +56,15 @@ void drawCharacter() {
 
 
 /*
-* Function: MoveCharacter
-* --------------------
-*  change character coordinates if the movement is allowed
-*
-*  keyPressed: an integer representing the key pressed.
-*  maze: the current maze we are playing in.
-*
-*  returns: void
-*/
+ *  Function: MoveCharacter
+ *  --------------------
+ *  Change character coordinates if the movement is allowed
+ *
+ *  keyPressed: an integer representing the key pressed.
+ *  maze: the current maze we are playing in.
+ *
+ *  returns: void
+ */
 void moveCharacter(int keyPressed, Maze maze) {
 
 	Coordinates temp = position;
@@ -95,15 +95,16 @@ void moveCharacter(int keyPressed, Maze maze) {
 
 
 /*
-* Function: isMovementAllowed
-* --------------------
-*  tell if the movement
-*
-*  temp: character's temporary coordinates after the movement.
-*  maze: the current maze we are playing in.
-*
-*  returns: True if the movement is allowed and false otherwise. 
-*/
+ *  Function: isMovementAllowed
+ *  --------------------
+ *  Tell if the movement is allowed by checking if the temp
+ *  position isn't in conflict with any block/wall
+ *
+ *  temp: character's temporary coordinates after the movement.
+ *  maze: the current maze we are playing in.
+ *
+ *  returns: True if the movement is allowed and false otherwise. 
+ */
 bool isMovementAllowed(Coordinates temp, Maze maze) {
 	const int BLOC_FULL_WIDTH = getBlocFullSize();
 
@@ -185,17 +186,23 @@ bool isMovementAllowed(Coordinates temp, Maze maze) {
 
 
 /*
-* Function: getCharacterPosition
-* --------------------
-*  tell if the movement is allowed by checking if the temp
-*  position isn't in conflict with any block/wall
-*
-*  returns: character's coordinates
-*/
+ *  Function: getCharacterPosition
+ *  --------------------
+ *  Get character's current position
+ *
+ *  returns: character's coordinates
+ */
 Coordinates getCharacterPosition() {
 	return position;
 }
 
+/*
+ *  Function: setCharacterSize
+ *  --------------------
+ *  set character size
+ *
+ *  returns: void
+ */
 void setCharacterSize(float userSize) {
 	/* Round to 1 decimal */
 	U_SIZE = floorf(userSize * 10) / 10;

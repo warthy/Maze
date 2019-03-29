@@ -19,6 +19,8 @@ int setDifficulty(void);
 void displayText(int x, int y, char string[], int fontSize);
 void clearFullScreen();
 
+
+/* ENTRY POINT - Game loop*/
 int main() {
 	int gd = DETECT, gm = 0, difficulty, keyPressed = 0;
 
@@ -57,13 +59,15 @@ int main() {
 			i++;
 
 		} while (!isWin() && keyPressed != KEY_ESCAPE);
-
 		/* Game's over */
 		clearviewport();
+		setcolor(rgb(255, 255, 255));
 
 		int endTime = time(NULL), timeTaken = (endTime - startTime);
 		char finishText[100];
-		setcolor(rgb(255,255,255));
+		
+
+		/* Winning screen */
 		if (isWin()) {
 			displayText(20, 100, "CONGRAT'S YOU BEAT THE MAZE !", 30);
 
@@ -74,6 +78,7 @@ int main() {
 			sprintf_s(finishText, 100, "score: %d\n\n", (int)(((float)(pow(difficulty,3)) / (float)(timeTaken)) * 100));
 			displayText(10, getmaxy()-18, finishText, 8);
 		}
+		/* Gave up screen */
 		else {
 			displayText(60, 100, "AND IT'S A WIN FOR THE MAZE", 30);
 
@@ -85,6 +90,8 @@ int main() {
 		keyPressed = 0;
 		displayText(6, 6, "Press ESC to exit program", 4);
 		displayText(getmaxx() - 120, 6, "Press ENTER to restart", 4);
+
+		/* We don't do anything while the player has'nt pressed ENTER or ESC */
 		do {
 			if (_kbhit())	keyPressed = _getch();
 		} while (keyPressed != KEY_ENTER && keyPressed != KEY_ESCAPE);
@@ -95,13 +102,26 @@ int main() {
 }
 
 
+/*
+*  Function:  initGame
+*  --------------------
+*  Initialize the game by generating a maze and setting character starting position.
+*
+*  returns: void
+*/
 void initGame() {
 	initMaze();
 	initCharacterPosition(getMaze().start);
 }
 
 
-
+/*
+*  Function:  isWin
+*  --------------------
+*  Check if the character has found the finishing point.
+*
+*  returns: true if he has win otherwise false
+*/
 bool isWin() {
 	Coordinates playerPos = getCharacterPosition();
 	Coordinates finishPos = getMaze().finish;
@@ -117,7 +137,13 @@ bool isWin() {
 }
 
 
-
+/*
+ *  Function:  setDifficulty
+ *  --------------------
+ *  Pick and set difficulty of the maze.
+ *
+ *  returns: difficulty selected
+ */
 int setDifficulty() {
 	int difficulty, height, width, selected = 1, j = 0, x, y = 380;
 	bool confirm = FALSE;
@@ -150,12 +176,13 @@ int setDifficulty() {
 					exit(0);
 			}
 		}
+		/* Display the 4 possible difficulties */
 		for (int i = 1; i < 5; i++) {
 			x = (640 / 5)*i;
 			sprintf_s(number, 3, " %d", i);
-
 			displayText(x, y, number, 15);
-			/* Underline selected difficulty. */
+
+			// Underline selected difficulty.
 			if (selected == i && j % 10)
 				line(x , y + 25, x + 20, y + 25);
 		}
@@ -193,15 +220,6 @@ int setDifficulty() {
 			height = 59;
 			width = 79;
 			break;
-
-	   /*   BROKEN
-		*	case 5:
-		*		//BLOC FULL WIDTH 4 - 636x476
-		*		blocWidth = 2.0;
-		*		height = 119;
-		*		width = 159;
-		*		break;
-		*/
 	}
 
 	setBlocSize(blocWidth);
@@ -214,14 +232,19 @@ int setDifficulty() {
 }
 
 
-
-void clearFullScreen() {
-	setviewport(0, 0, getmaxx(), getmaxy(), 0);
-	clearviewport();
-}
-
-
-
+/*
+ *  Function:  displayText
+ *  --------------------
+ *  Display text inside window using BGI function
+ *  as it displays chineses char if we use BGI function directly.
+ *
+ *  x: x position of the beginning of the text.
+ *  y: y position of the beginning of the text.
+ *  string: string which will be displayed.
+ *  fontSize: font size of the text .
+ *
+ *  returns: void
+ */
 void displayText(int x, int y, char string[], int fontSize) {
 	int stringLength = strlen(string), charWidth = 0;
 	unsigned short character[1];
@@ -238,6 +261,8 @@ void displayText(int x, int y, char string[], int fontSize) {
 	}
 }
 
-int characterWidth(char Character) {
-	return 1;
-};
+
+void clearFullScreen() {
+	setviewport(0, 0, getmaxx(), getmaxy(), 0);
+	clearviewport();
+}

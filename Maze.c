@@ -16,6 +16,14 @@ void carvingRecursion(int row, int col);
 void generateRandomDirection(int array[4]);
 void generateFinishingPoint(int BLOC_FULL_WIDTH);
 
+/*
+ *  Function:  initMaze
+ *  --------------------
+ *  Initialize maze by generating a random maze
+ *  and setting random starting and finishing points.
+ * 
+ *  returns: void
+ */
 void initMaze() {
 	int row, col;
 	const int BLOC_FULL_WIDTH = getBlocFullSize();
@@ -51,6 +59,16 @@ void initMaze() {
 	generateFinishingPoint(BLOC_FULL_WIDTH);
 }
 
+
+/*
+ *  Function:  drawMaze
+ *  --------------------
+ *  Draw maze generated during initMaze()
+ *
+ *  characterPosition: character current position
+ *
+ *  returns: void
+ */
 void drawMaze(Coordinates characterPosition) {
 	const float BLOC_WIDTH = getBlocSize();
 	Coordinates bloc = {2*BLOC_WIDTH, 2*BLOC_WIDTH};
@@ -77,19 +95,55 @@ void drawMaze(Coordinates characterPosition) {
 
 }
 
+
+/*
+ *  Function:  getMaze
+ *  --------------------
+ *  Get maze generated during initMaze()
+ *
+ *  returns: the maze
+ */
 Maze getMaze() {
 	return mazeSelected;
 }
 
+
+/*
+ *  Function:  changeVisibility
+ *  --------------------
+ *  Toggle partial vision
+ *
+ *  returns: void
+ */
 void changeVisibility() {
 	partialVision = !partialVision;
 }
 
+
+/*
+ *  Function:  setMazeSize
+ *  --------------------
+ *  Set size of the maze
+ * 
+ *  height: maze's height
+ *	width:  maze's width
+ *
+ *  returns: void
+ */
 void setMazeSize(int height, int width) {
 	HEIGHT = height;
 	WIDTH = width;
 }
 
+/*
+ *  Function:  generateFinishingPoint
+ *  --------------------
+ *  Generate random finishing point on one of the maze's border
+ *
+ *  BLOC_FULL_WIDTH: width of a bloc inside the maze
+ *
+ *  returns: void
+ */
 void generateFinishingPoint(const int BLOC_FULL_WIDTH) {
 	int randCol, randRow, colFinish, rowFinish;
 	
@@ -140,6 +194,18 @@ void generateFinishingPoint(const int BLOC_FULL_WIDTH) {
 	mazeSelected.schema[rowFinish][colFinish] = 0;
 }
 
+
+/*
+ *  Function:  carvingRecursion
+ *  --------------------
+ *  Carve the maze in a random way, this part
+ *  is based on DPS Algorithm
+ *
+ *  col: current column
+ *  row: current row
+ *
+ *  returns: void
+ */
 void carvingRecursion(int row, int col) {
 	int randomDir[4];
 	generateRandomDirection(randomDir);
@@ -191,11 +257,21 @@ void carvingRecursion(int row, int col) {
 	
 }
 
-void generateRandomDirection(int array[4])
+/*
+ *  Function:  generateRandomDirection
+ *  --------------------
+ *  Generate a shuffled array where 
+ *  each number is representing a direction
+ *
+ *  directions: array containing the 4 directions
+ *
+ *  returns: void
+ */
+void generateRandomDirection(int directions[4])
 {
 	/* Set up array with 4 directions. */
 	for (int i = 0; i < 4; i++) {
-		array[i] = i;
+		directions[i] = i;
 	}
 		
 	
@@ -204,9 +280,9 @@ void generateRandomDirection(int array[4])
 	for (j = 0; j < 4-1; j++)
 	{
 		size_t k = j + rand() / (RAND_MAX / (4 - j) + 1);
-		int t = array[k];
-		array[k] = array[j];
-		array[j] = t;
+		int t = directions[k];
+		directions[k] = directions[j];
+		directions[j] = t;
 	}
 }
 
