@@ -156,7 +156,7 @@ int setDifficulty() {
 
 			displayText(x, y, number, 15);
 			/* Underline selected difficulty. */
-			if (selected == i)
+			if (selected == i && j % 4)
 				line(x , y + 25, x + 20, y + 25);
 		}
 
