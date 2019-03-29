@@ -1,7 +1,9 @@
 #include <stdio.h>
 #include <math.h>
 #include <graphics.h>
+
 #include "Global.h"
+#include "Bloc.h"
 
 #define SPEED 1
 
@@ -106,7 +108,8 @@ void moveCharacter(int keyPressed, Maze maze) {
  *  returns: True if the movement is allowed and false otherwise. 
  */
 bool isMovementAllowed(Coordinates temp, Maze maze) {
-	const int BLOC_FULL_WIDTH = getBlocFullSize();
+	const float BLOC_WIDTH = getBlocSize();
+	const int BLOC_FULL_WIDTH = BLOC_WIDTH * 2;
 
 	/* Check that we are inside the maze/window. */
 	if (temp.x - U_SIZE < 0 || temp.y - U_SIZE < 0 || temp.x + U_SIZE > getmaxx() || temp.y + U_SIZE > getmaxy())
@@ -118,7 +121,7 @@ bool isMovementAllowed(Coordinates temp, Maze maze) {
 	switch (orientation) {
 		/* Trying to go up. */
 		case NORTH:
-			if (maze.schema[row][col] || (temp.x % BLOC_FULL_WIDTH && !(temp.x % 10) && maze.schema[row][col + 1]))
+			if (maze.schema[row][col] || (temp.x % BLOC_FULL_WIDTH && !fmod(temp.x, BLOC_WIDTH) && maze.schema[row][col + 1]))
 				return FALSE;
 			else if (temp.y < (BLOC_FULL_WIDTH * (row + 1)) - U_SIZE) {
 				if (maze.schema[row - 1][col])
@@ -135,49 +138,43 @@ bool isMovementAllowed(Coordinates temp, Maze maze) {
 
 		/* Trying to go down. */
 		case SOUTH:
-			if (maze.schema[row][col] || (temp.x % BLOC_FULL_WIDTH && !(temp.x % 10) && maze.schema[row][col - 1]))
+			if (maze.schema[row][col] || (temp.x % BLOC_FULL_WIDTH && !fmod(temp.x, BLOC_WIDTH) && maze.schema[row][col - 1]))
 				return FALSE;
-			else if (temp.y > (BLOC_FULL_WIDTH * (row + 1)) + U_SIZE)
+			else if (temp.y > (BLOC_FULL_WIDTH * (row + 1)) + U_SIZE){
 				if (maze.schema[row + 1][col])
 					return FALSE;
-				else if (temp.x < (BLOC_FULL_WIDTH * (col + 1)) - U_SIZE)
-					if (maze.schema[row + 1][col - 1])
-						return FALSE;
-				else if (temp.x > (BLOC_FULL_WIDTH * (col + 1)) + U_SIZE)
-					if (maze.schema[row + 1][col + 1]) {
-						return FALSE;
+				else if (temp.x < (BLOC_FULL_WIDTH * (col + 1)) - U_SIZE && maze.schema[row + 1][col - 1])
+					return FALSE;
+				else if (temp.x > (BLOC_FULL_WIDTH * (col + 1)) + U_SIZE && maze.schema[row + 1][col + 1])
+					return FALSE;
 			}
 			break;
 
 		/* Trying to go right. */
 		case EAST:
-			if (maze.schema[row][col] || (temp.y % BLOC_FULL_WIDTH && !(temp.y % 10) && maze.schema[row + 1][col]))
+			if (maze.schema[row][col] || (temp.y % BLOC_FULL_WIDTH && !fmod(temp.y, BLOC_WIDTH) && maze.schema[row + 1][col]))
 				return FALSE;
 			else if (temp.x > (BLOC_FULL_WIDTH * (col + 1)) + U_SIZE) {
 				if (maze.schema[row][col + 1])
 					return FALSE;
-				else if (temp.y < (BLOC_FULL_WIDTH * (row + 1)) - U_SIZE)
-					if (maze.schema[row - 1][col + 1])
-						return FALSE;
-				else if (temp.y >(BLOC_FULL_WIDTH * (row + 1)) + U_SIZE)
-					if (maze.schema[row + 1][col + 1])
-						return FALSE;
+				else if (temp.y < (BLOC_FULL_WIDTH * (row + 1)) - U_SIZE && maze.schema[row - 1][col + 1])
+					return FALSE;
+				else if (temp.y > (BLOC_FULL_WIDTH * (row + 1)) + U_SIZE && maze.schema[row + 1][col + 1])
+					return FALSE;
 			}
 			break;
 
 		/* Trying to go left. */
 		case WEST:
-			if (maze.schema[row][col] || (temp.y % BLOC_FULL_WIDTH && !(temp.y % 10) && maze.schema[row - 1][col]))
+			if (maze.schema[row][col] || (temp.y % BLOC_FULL_WIDTH && !fmod(temp.y, BLOC_WIDTH) && maze.schema[row - 1][col]))
 				return FALSE;
 			else if (temp.x <  (BLOC_FULL_WIDTH * (col + 1)) - U_SIZE) {
 				if (maze.schema[row][col - 1])
 					return FALSE;
-				else if (temp.y < (BLOC_FULL_WIDTH * (row + 1)) - U_SIZE)
-					if (maze.schema[row - 1][col - 1])
-						return FALSE;
-				else if (temp.y >(BLOC_FULL_WIDTH * (row + 1)) + U_SIZE)
-					if (maze.schema[row + 1][col - 1])
-						return FALSE;
+				else if (temp.y < (BLOC_FULL_WIDTH * (row + 1)) - U_SIZE && maze.schema[row - 1][col - 1])
+					return FALSE;
+				else if (temp.y >(BLOC_FULL_WIDTH * (row + 1)) + U_SIZE && maze.schema[row + 1][col - 1])
+					return FALSE;
 			}
 			break;
 	}
