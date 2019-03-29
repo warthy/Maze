@@ -67,31 +67,40 @@ void drawCharacter() {
  *
  *  returns: void
  */
-void moveCharacter(int keyPressed, Maze maze) {
-
+void moveCharacter(Maze maze) {
 	Coordinates temp = position;
+	int direction = NONE;
 
-	switch (keyPressed) {
-		case KEY_UP:
+	if (keypressed(KB_UP))
+		direction = NORTH;
+	else if (keypressed(KB_LEFT))
+		direction = WEST;
+	else if (keypressed(KB_DOWN))
+		direction = SOUTH;
+	else if (keypressed(KB_RIGHT))
+		direction = EAST;
+
+	switch (direction) {
+		case NORTH:
 			orientation = NORTH;
 			temp.y -= SPEED;
 			break;
-		case KEY_DOWN:
+		case SOUTH:
 			orientation = SOUTH;
 			temp.y += SPEED;
 			break;
-		case KEY_RIGHT:
+		case EAST:
 			orientation = EAST;
 			temp.x += SPEED;
 			break;
-		case KEY_LEFT:
+		case WEST:
 			orientation = WEST;
 			temp.x -= SPEED;
 			break;
 	}
 	
 	/* If the movement is possible (not blocked by wall or extremities) we update character position. */
-	if (isMovementAllowed(temp, maze)) position = temp;
+	if (direction && isMovementAllowed(temp, maze)) position = temp;
 
 }
 

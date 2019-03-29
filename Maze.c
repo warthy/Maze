@@ -147,7 +147,7 @@ void setMazeSize(int height, int width) {
 void generateFinishingPoint(const int BLOC_FULL_WIDTH) {
 	int randCol, randRow, colFinish, rowFinish;
 	
-	DIRECTION side = rand() % 4;
+	DIRECTION side = rand() % 4 + 1;
 	switch (side) {
 		case NORTH:
 			do {
@@ -271,7 +271,7 @@ void generateRandomDirection(int directions[4])
 {
 	/* Set up array with 4 directions. */
 	for (int i = 0; i < 4; i++) {
-		directions[i] = i;
+		directions[i] = i+1;
 	}
 		
 	

@@ -22,7 +22,7 @@ void clearFullScreen();
 
 /* ENTRY POINT - Game loop*/
 int main() {
-	int gd = DETECT, gm = 0, difficulty, keyPressed = 0;
+	int gd = DETECT, gm = 0, difficulty, choiceMade = 0;;
 
 	do {
 
@@ -45,20 +45,21 @@ int main() {
 			
 			delay(5);
 
-			if (_kbhit()) {
-				keyPressed = _getch();
+			
 
-				/* KEY_CONTROL is F1 on my computer - UNRELIABLE*/
-				if (keyPressed == KEY_CONTRL)
-					changeVisibility();
-				else
-					moveCharacter(keyPressed, getMaze());
+			if (keypressed(KB_F1)) {
+				changeVisibility();
+				delay(100);
 			}
-
+				
+			else
+				moveCharacter(getMaze());
+			
+			delay(10);
 			setvisualpage(i % 2);
 			i++;
 
-		} while (!isWin() && keyPressed != KEY_ESCAPE);
+		} while (!isWin() && !keypressed(KB_ESC));
 		/* Game's over */
 		clearviewport();
 		setcolor(rgb(255, 255, 255));
@@ -75,7 +76,7 @@ int main() {
 			else				sprintf_s(finishText, 100, "This took you: %ds \n\n", timeTaken);
 			displayText(230, 200, finishText, 12);
 
-			sprintf_s(finishText, 100, "score: %d\n\n", (int)(((float)(pow(difficulty,3)) / (float)(timeTaken)) * 100));
+			sprintf_s(finishText, 100, "score: %d\n\n", (int)( exp(difficulty) / (float)(timeTaken) ) * 2500);
 			displayText(10, getmaxy()-18, finishText, 8);
 		}
 		/* Gave up screen */
@@ -87,28 +88,33 @@ int main() {
 			displayText(220, 200, finishText, 12);
 		}
 
-		keyPressed = 0;
 		displayText(6, 6, "Press ESC to exit program", 4);
 		displayText(getmaxx() - 120, 6, "Press ENTER to restart", 4);
+		
+		choiceMade = 0;
 
 		/* We don't do anything while the player has'nt pressed ENTER or ESC */
 		do {
-			if (_kbhit())	keyPressed = _getch();
-		} while (keyPressed != KEY_ENTER && keyPressed != KEY_ESCAPE);
+			if (keypressed(KB_ENTER))
+				choiceMade = 1;
+			else if(keypressed(KB_ESC))
+				choiceMade = 2;
 
-	} while (keyPressed == KEY_ENTER);
+		} while (!choiceMade);
+
+	} while (choiceMade == 1);
 
 	return 0;
 }
 
 
 /*
-*  Function:  initGame
-*  --------------------
-*  Initialize the game by generating a maze and setting character starting position.
-*
-*  returns: void
-*/
+ *  Function:  initGame
+ *  --------------------
+ *  Initialize the game by generating a maze and setting character starting position.
+ *
+ *  returns: void
+ */
 void initGame() {
 	initMaze();
 	initCharacterPosition(getMaze().start);
@@ -116,12 +122,12 @@ void initGame() {
 
 
 /*
-*  Function:  isWin
-*  --------------------
-*  Check if the character has found the finishing point.
-*
-*  returns: true if he has win otherwise false
-*/
+ *  Function:  isWin
+ *  --------------------
+ *  Check if the character has found the finishing point.
+ *
+ *  returns: true if he has win otherwise false
+ */
 bool isWin() {
 	Coordinates playerPos = getCharacterPosition();
 	Coordinates finishPos = getMaze().finish;
@@ -161,21 +167,22 @@ int setDifficulty() {
 		displayText(200, 300, "Select a difficulty between 1 and 4 :", 10);
 		displayText(205, 317, "Move with the arrow and press Enter to confirm", 4);
 		
-		if (_kbhit()) {
-			switch (_getch()) {
-				case KEY_ENTER:
-					confirm = TRUE;
-					break;
-				case KEY_LEFT:
-					if (selected > 1) selected--;
-					break;
-				case KEY_RIGHT:
-					if (selected < 4) selected++;
-					break;
-				case KEY_ESCAPE:
-					exit(0);
-			}
+		if (keypressed(KB_ENTER)) {
+			confirm = TRUE;
+			delay(300);
 		}
+		else if (keypressed(KB_LEFT) && selected > 1) {
+			selected--;
+			delay(300);
+		}
+		
+		else if (keypressed(KB_RIGHT) && selected < 4) {
+			selected++;
+			delay(300);
+		}
+		else if (keypressed(KB_ESC))
+			exit(0);
+
 		/* Display the 4 possible difficulties */
 		for (int i = 1; i < 5; i++) {
 			x = (640 / 5)*i;
@@ -186,8 +193,6 @@ int setDifficulty() {
 			if (selected == i && j % 10)
 				line(x , y + 25, x + 20, y + 25);
 		}
-
-		delay(100);
 
 		setvisualpage(j % 2);
 		j++;

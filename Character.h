@@ -3,7 +3,7 @@
 
 extern void initCharacterPosition(Coordinates);
 extern void drawCharacter();
-extern void moveCharacter(int, Maze);
+extern void moveCharacter(Maze);
 extern void setCharacterSize(float userSize);
 extern Coordinates getCharacterPosition();
 
